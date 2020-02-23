@@ -1,0 +1,205 @@
+@media screen and (min-width: 300px) {
+    /* la disposition des "sections" */
+    body {
+        grid-template-areas:    "header"
+                                "title"
+                                "form"
+                                "forecast"
+                                "spinner"
+                                "footer";
+        background-position: right;
+    }
+    /* titre */
+    h1 {
+        font-size: 1rem;
+    }
+    h2{
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }
+    /* formulaire */
+    form {
+        max-width: 70vw;
+        margin: 10px auto;
+        padding: 5px 10px 10px 10px;
+    }
+    label {
+        margin: 0 0 50px 0;
+        overflow: visible;
+    }
+    .container-do-action {
+        flex-direction: column;
+    }
+    input[type=text] {
+        padding: 5px;
+    }
+    /* forecast */
+    #container-forecast {
+        font-size: 0.6em;
+        margin: 3px;
+    }
+    ul {
+        margin: 0;
+        padding: 5px;
+    }
+    li {
+        padding: 0;
+        white-space: initial;
+    }
+    #icons li {
+        font-size: 1.3rem;
+        transform: translate(0.1rem,-0.1rem);
+    }
+    
+
+}
+
+@media screen and (min-width: 350px) {
+    header {
+        height: 10rem;
+    }
+    /* titre */
+    h1 {
+        font-size: 1.4rem;
+    }
+    /* formulaire */
+    label {
+        margin: 0 0 30px 0;
+    }
+    /* forecast */
+    #container-forecast {
+        font-size: 0.7em;
+    }
+    #icons li {
+        font-size: 1.5rem;
+        transform: translate(0.1rem,0.1rem);
+    }
+}
+
+@media screen and (min-width: 700px) {
+
+    body {
+        background-position: center;
+    }
+    /* titre */
+    h1 {
+        font-size: 2.3rem;
+    }
+    /* formulaire */
+    label {
+        margin: 8px 0 30px 0;
+    }
+    /* forecast */
+    #container-forecast {
+        font-size: 1rem;
+        flex-wrap: wrap;
+    }
+    #icons li {
+        font-size: 2rem;
+        transform: translateY(-1.1rem);
+    }
+}
+@media screen and (min-width:900px) {
+    header {
+        height: 15rem;
+    }
+    /* titre */
+    h1 {
+        font-size: 4.5rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+    }
+    /* formulaire */
+    form {
+        max-width: 70%;
+        margin: 50px auto;
+    }
+    label {
+        margin: 8px auto 8px auto;
+        overflow: hidden;
+        font-size: 1rem;
+    }
+    .container-do-action {
+        flex-direction: row;
+        width: 100%;
+        margin: auto;
+    }
+    /* forecast */
+    #container-forecast {
+        font-size: 1.2rem;
+        white-space: initial;
+    }
+    ul {
+        margin: auto;
+    }
+    li {
+        padding: 15px;
+        white-space: nowrap;
+    }
+    #icons li {
+        font-size: 3rem;
+        transform: translateY(-1.5rem);
+    }
+}
+
+@media screen and (min-width:1350px) {
+    /* disposition des "sections" */
+    body {
+        grid-template-columns: 1fr 3fr;
+        grid-template-areas:    "header header header"
+                                "title title title"
+                                "form forecast forecast "
+                                "form spinner spinner"
+                                "footer footer footer";
+    }
+    h2 {
+        font-size: 1.7rem;
+        margin-bottom: 50px;
+    }
+    /* formulaire */
+    #container-form {
+        margin: 10px;
+        min-height: 100vh;
+    }
+    form {
+        max-height: 20vh;
+        max-width: 100%;
+        margin: 0;
+    }
+    label {
+        margin: 8px auto 25px auto;
+        overflow: visible;
+    }
+    .container-do-action input {
+        margin: 10px 5px 0 5px;
+    }
+    /* forecast */
+    .container {
+        margin: 10px;
+        min-height: 100vh;
+    }
+    #container-forecast {
+        margin: 0 auto;
+        flex-wrap: nowrap;
+    }
+    li {
+        padding: 10px;
+    }
+    #spinner {
+        width: 80px;
+        height: 80px;
+        margin-top: 100px;
+    }
+}
+
+@media screen and (min-width:1630px) {
+    /* forecast */
+    #container-forecast {
+        font-size: 1.7rem;
+    }
+    #spinner {
+        width: 9rem;
+        height: 9rem;
+    }
+}
