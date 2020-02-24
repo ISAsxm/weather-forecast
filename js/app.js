@@ -16,7 +16,7 @@ var containerForecast = document.getElementById('container-forecast');
 // fonction de décodage des htmlEntities pour pouvoir les afficher dans le navigateur
 function decodeHTML(html) 
 {
-	var text = document.createElement("textarea");
+	let text = document.createElement("textarea");
 	text.innerHTML = html;
 	return text.value;
 }
@@ -25,7 +25,7 @@ function decodeHTML(html)
 // fonction permettant de sécuriser les inputs (équivalent du htmlspecialchars)
 function escapeHtml(text) 
 {
-    var map = {
+    let map = {
       '&': '&amp;',
       '<': '&lt;',
       '>': '&gt;',
@@ -42,11 +42,11 @@ function escapeHtml(text)
 // fonction pour effacer les données si déjà chargées, dans le cas ou le user souhaite faire une autre recherche (utiliser également avec le bouton reset)
 function eraseDatas() 
 {
-    var elDates = document.getElementById('dates');
-    var elIcons = document.getElementById('icons');
-    var elTemperaturesMin = document.getElementById('temperaturesMin');
-    var elTemperaturesMax = document.getElementById('temperaturesMax');
-    var elCityName = document.getElementById('show-city-name');
+    let elDates = document.getElementById('dates');
+    let elIcons = document.getElementById('icons');
+    let elTemperaturesMin = document.getElementById('temperaturesMin');
+    let elTemperaturesMax = document.getElementById('temperaturesMax');
+    let elCityName = document.getElementById('show-city-name');
 
     elDates.innerHTML = " ";
     elIcons.innerHTML = " ";
@@ -61,7 +61,7 @@ function eraseDatas()
 // fonction permettant de calculer la date actuelle et d'ajouter un nombres de jours en paramètres
 Date.prototype.addDays = function(days) 
 {
-    var date = new Date(this.valueOf());
+    let date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
 
     return date;
@@ -78,8 +78,8 @@ function weatherByPlaceForecast(lat, lon, duration)
     // pour afficher le spinner
     spinner.style.display="block";
 
-    var data = "";
-    var xhr = new XMLHttpRequest();
+    let data = "";
+    let xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
     xhr.addEventListener("readystatechange", function() 
     {
@@ -89,32 +89,32 @@ function weatherByPlaceForecast(lat, lon, duration)
         // pour faire apparaître le container forecast
         containerForecast.style.visibility="initial";
 
-        var responses = JSON.parse(this.responseText);
+        let responses = JSON.parse(this.responseText);
         responses.forEach(function(response) 
         {
             // pour afficher les dates
-            var datesElt = document.getElementById("dates");
-            var dateElt = document.createElement("li");
+            let datesElt = document.getElementById("dates");
+            let dateElt = document.createElement("li");
             dateElt.textContent = response.observation_time.value;
             datesElt.appendChild(dateElt);
 
             // pour afficher les températures Min
-            var temperaturesMinElt = document.getElementById("temperaturesMin");
-            var tempMinElt = document.createElement("li");
-            tempMinElt.textContent = " Température prévisionnelle min " + Math.round(response.temp[0].min.value) + ' ' + response.temp[0].min.units +"°";
+            let temperaturesMinElt = document.getElementById("temperaturesMin");
+            let tempMinElt = document.createElement("li");
+            tempMinElt.textContent = " Température prévisionnelle min " + Math.round(response.temp[0].min.value) +"°" + response.temp[0].min.units;
             temperaturesMinElt.appendChild(tempMinElt);
 
             // pour afficher les températures Max
-            var temperaturesMaxElt = document.getElementById("temperaturesMax");
-            var tempMaxElt = document.createElement("li");
-            tempMaxElt.textContent = " Température prévisionnelle max " + Math.round(response.temp[1].max.value) + ' ' + response.temp[1].max.units +"°";
+            let temperaturesMaxElt = document.getElementById("temperaturesMax");
+            let tempMaxElt = document.createElement("li");
+            tempMaxElt.textContent = " Température prévisionnelle max " + Math.round(response.temp[1].max.value) +"°" + response.temp[1].max.units;
             temperaturesMaxElt.appendChild(tempMaxElt);
 
             // pour afficher les icônes
-            var iconsElt = document.getElementById('icons');
-            var iconElt = document.createElement("li");
-            var icon;
-            var weather=response.weather_code.value;
+            let iconsElt = document.getElementById('icons');
+            let iconElt = document.createElement("li");
+            let icon;
+            let weather=response.weather_code.value;
             switch(weather) {
                 case 'clear':
                     icon = decodeHTML('&#127774;');
@@ -164,6 +164,12 @@ function weatherByPlaceForecast(lat, lon, duration)
             }
             iconElt.textContent = icon;
             iconsElt.appendChild(iconElt);
+
+            if (window.screen.width < 1350) {
+                document.querySelector('#container-forecast').scrollIntoView({ 
+                    behavior: 'smooth'
+                });
+            }
         });
     }
     
@@ -183,7 +189,7 @@ function getMyPosition()
     // pour faire apparaître le spinner
     spinner.style.display="block";
 
-    var options = { 
+    const options = { 
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0 
@@ -194,8 +200,8 @@ function getMyPosition()
         // pour cacher le spinner
         spinner.style.display="none";
 
-        var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
 
         // pas opérationel car pas assez précis (indique Paris au lieu de Lyon...)
         // getMyCity(lat,lon);
@@ -214,14 +220,14 @@ function getMyPosition()
 // fonction pour la transcription en geodata, appel a l'api data.gouv, permettant de trouver les géoCoordonnées à partir du nom d'une ville ou de son code postal (code postal doit être unique, ne fonctionne pas si partagé)
 function getOneLocation(town)
 {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api-adresse.data.gouv.fr/search/?q="+town+"&type=municipality&limit=1&autocomplete=1", true);
     xhr.onload = function () 
     {
-        var data = JSON.parse(xhr.responseText);
-        var city = data.features[0].properties.city;
-        var lat = data.features[0].geometry.coordinates[1];
-        var lon = data.features[0].geometry.coordinates[0];
+        let data = JSON.parse(xhr.responseText);
+        let city = data.features[0].properties.city;
+        let lat = data.features[0].geometry.coordinates[1];
+        let lon = data.features[0].geometry.coordinates[0];
 
         showCityName(city);
         weatherByPlaceForecast(lat, lon, duration);
@@ -234,7 +240,7 @@ function getOneLocation(town)
 // fonction pour afficher le nom de la ville demandée
 function showCityName(city) 
 {
-    var containerCityName = document.getElementById('show-city-name');
+    let containerCityName = document.getElementById('show-city-name');
     containerCityName.innerText= "Voici les prévisions météorologiques sur 7 jours pour "+city;
 }
 
@@ -242,12 +248,12 @@ function showCityName(city)
 // fonction pour trouver le nom de la ville selon la position du user (clic sur géolocalisation)
 function getMyCity(lat,lon) 
 {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api-adresse.data.gouv.fr/reverse/?lon="+lon+"&lat="+lat, true);
     xhr.onload = function () 
     {
-        var data = JSON.parse(xhr.responseText);
-        var city = data.features[0].properties.city;
+        let data = JSON.parse(xhr.responseText);
+        let city = data.features[0].properties.city;
 
         showCityName(city);
     }
@@ -272,7 +278,7 @@ var buttonSubmit = document.getElementById("button-submit");
 buttonSubmit.addEventListener('click', function(e)
 {
     e.preventDefault();
-    var choiceTown = document.getElementById("town").value;
+    let choiceTown = document.getElementById("town").value;
     searchTown = escapeHtml(choiceTown);
     if (searchTown) {
 
