@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
 }
-/* pour les gid area */
+/* pour le template grid area */
 header {
     grid-area: header;
 }
@@ -45,7 +45,6 @@ font-family: 'Quicksand', Georgia, "Times New Roman", Times, serif;
 h2 {
     text-align: center;
     font-family: 'Pacifico', Arial, Helvetica, sans-serif;
-    /* font-size: 2rem; */
 }
 .container {
     margin-bottom: 20px;
@@ -55,7 +54,8 @@ display: flex;
 justify-content: center;
 }
 form {
-    background: rgba(249,249,249,0.6);
+    background: rgba(255,255,255,0.6);
+    /* background: rgba(249,249,249,0.6); */
     border-radius: 5px;
     padding: 20px;
     font-family: 'Quicksand', Georgia, "Times New Roman", Times, serif;
@@ -129,8 +129,8 @@ width: 100%;
 display: flex;
 justify-content: space-evenly;
 text-align: center;
-/* background: rgba(255,255,255,0.6); */
-background: rgba(249,249,249,0.6);
+background: rgba(255,255,255,0.6);
+/* background: rgba(249,249,249,0.6); */
 border-radius: 8px;
 visibility: hidden;
 }
