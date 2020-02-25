@@ -58,7 +58,7 @@ function eraseDatas()
 }
 
 
-// fonction permettant de calculer la date actuelle et d'ajouter un nombres de jours en paramètres
+// fonction permettant de calculer la date actuelle et d'ajouter un nombres de jours choisi en paramètre
 Date.prototype.addDays = function(days) 
 {
     let date = new Date(this.valueOf());
@@ -68,12 +68,46 @@ Date.prototype.addDays = function(days)
 }
 // pour ajouter 6 jours à la date actuelle et convertir le tout en format iso-8601 (format supporté par l'api)
 var date = new Date();
-var duration = date.addDays(6).toISOString();
-// console.log(date.toLocaleDateString());
+var period = date.addDays(6).toISOString();
+
+
+// fonction pour formater la date lors de l'affichage, prend en paramètre la valeur de la réponse à la requête à l'api
+function formattingDate(oneDate) {
+    const daysNames = [
+        'Dim',
+        'Lun',
+        'Mar',
+        'Mer',
+        'Jeu',
+        'Ven',
+        'Sam'
+      ];
+    const monthsNames = [
+        'Janvier',
+        'Février',
+        'Mars',
+        'Avril',
+        'Mai',
+        'Juin',
+        'Juillet',
+        'Août',
+        'Septembre',
+        'Octobre',
+        'Novembre',
+        'Decembre'
+      ];
+
+    let formatDate = new Date(oneDate);
+    let dayName = daysNames[formatDate.getDay()];
+    let dayDate = formatDate.getDate();
+    let monthName = monthsNames[formatDate.getMonth()];
+
+    return formattedDate = `${dayName} ${dayDate} ${monthName}`;
+}
 
 
 // fonction permettant d'afficher les prévisions météo selon un emplacement et une période (prend en paramètre la latitude, la longitude et la période), fait appel a l'api climacell
-function weatherByPlaceForecast(lat, lon, duration)
+function weatherByPlaceForecast(lat, lon, period)
 {
     // pour afficher le spinner
     spinner.style.display="block";
@@ -95,19 +129,20 @@ function weatherByPlaceForecast(lat, lon, duration)
             // pour afficher les dates
             let datesElt = document.getElementById("dates");
             let dateElt = document.createElement("li");
-            dateElt.textContent = response.observation_time.value;
+            let formattedDate = formattingDate(response.observation_time.value);
+            dateElt.textContent = formattedDate;
             datesElt.appendChild(dateElt);
 
             // pour afficher les températures Min
             let temperaturesMinElt = document.getElementById("temperaturesMin");
             let tempMinElt = document.createElement("li");
-            tempMinElt.textContent = " Température prévisionnelle min " + Math.round(response.temp[0].min.value) +"°" + response.temp[0].min.units;
+            tempMinElt.textContent = " Température prévisionnelle min " + Math.round(response.temp[0].min.value) + "°" + response.temp[0].min.units;
             temperaturesMinElt.appendChild(tempMinElt);
 
             // pour afficher les températures Max
             let temperaturesMaxElt = document.getElementById("temperaturesMax");
             let tempMaxElt = document.createElement("li");
-            tempMaxElt.textContent = " Température prévisionnelle max " + Math.round(response.temp[1].max.value) +"°" + response.temp[1].max.units;
+            tempMaxElt.textContent = " Température prévisionnelle max " + Math.round(response.temp[1].max.value) + "°" + response.temp[1].max.units;
             temperaturesMaxElt.appendChild(tempMaxElt);
 
             // pour afficher les icônes
@@ -174,7 +209,7 @@ function weatherByPlaceForecast(lat, lon, duration)
     }
     
     });
-    xhr.open("GET", "https://api.climacell.co/v3/weather/forecast/daily?lat="+lat+"&lon="+lon+"&start_time=now&end_time="+duration+"&unit_system=si&fields=temp,weather_code");
+    xhr.open("GET", "https://api.climacell.co/v3/weather/forecast/daily?lat="+lat+"&lon="+lon+"&start_time=now&end_time="+period+"&unit_system=si&fields=temp,weather_code");
     xhr.setRequestHeader("apikey", "s97GKAHOKyajMLnKOzPijDzJK0BBvio0");
     xhr.setRequestHeader("content-type", "application/json");
 
@@ -183,7 +218,7 @@ function weatherByPlaceForecast(lat, lon, duration)
 
 
 // fonction pour obtenir la position actuelle grâce à la fonction getCurrentPosition() et du navigateur qui récupère la position du device 
-//        !!!!! manque de précision lors des tests, fonction getMyCity() mises en commentaire pour l'instant !!!!!!!
+//        !!!!! manque de précision lors des tests, fonction getMyCity() mise en commentaire pour l'instant !!!!!!!
 function getMyPosition() 
 {
     // pour faire apparaître le spinner
@@ -205,7 +240,7 @@ function getMyPosition()
 
         // pas opérationel car pas assez précis (indique Paris au lieu de Lyon...)
         // getMyCity(lat,lon);
-        weatherByPlaceForecast(lat, lon, duration);
+        weatherByPlaceForecast(lat, lon, period);
     }
     function error(error) 
     {
@@ -230,7 +265,7 @@ function getOneLocation(town)
         let lon = data.features[0].geometry.coordinates[0];
 
         showCityName(city);
-        weatherByPlaceForecast(lat, lon, duration);
+        weatherByPlaceForecast(lat, lon, period);
     }
 
     xhr.send();
