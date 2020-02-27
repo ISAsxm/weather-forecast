@@ -276,10 +276,10 @@ function getOneLocation(town)
         let dataLength = Object.keys(data.features).length;
 
         if (dataLength != 0) {
-            let city = data.features[0].properties.city;
+            let city = data.features[0].properties.city + " (" + data.features[0].properties.postcode+ " )";
             let lat = data.features[0].geometry.coordinates[1];
             let lon = data.features[0].geometry.coordinates[0];
-
+            console.log(data);
             showCityName(city);
             weatherByPlaceForecast(lat, lon, period);
         } else {
