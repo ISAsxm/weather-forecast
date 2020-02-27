@@ -7,8 +7,8 @@ var spinner = document.getElementById("spinner");
 spinner.style.display="none";
 // ui/ux : faire apparaître le container forecast seulement lorsqu'il reçoit les données
 var containerForecast = document.getElementById('container-forecast');
-// containerForecast.style.visibility="hidden";
-
+// ui/ux : container pour afficher un feed-back lors des actions et erreurs
+var elStatus = document.getElementById("show-status");
 // ---------------------------------------------------
 // ------------------- fonctions ---------------------
 // ---------------------------------------------------
@@ -46,13 +46,13 @@ function eraseDatas()
     let elIcons = document.getElementById('icons');
     let elTemperaturesMin = document.getElementById('temperaturesMin');
     let elTemperaturesMax = document.getElementById('temperaturesMax');
-    let elCityName = document.getElementById('show-status');
 
     elDates.innerHTML = " ";
     elIcons.innerHTML = " ";
     elTemperaturesMin.innerHTML = " ";
     elTemperaturesMax.innerHTML = " ";
-    elCityName.innerText = "Entrez le nom de votre ville ou son code postal, ou utilisez la géolocalistaion pour afficher les prévisions météorologiques sur 7 jours";
+
+    elStatus.innerText = "Entrez le nom de votre ville ou son code postal, ou utilisez la géolocalistaion pour afficher les prévisions météorologiques sur 7 jours";
 
     containerForecast.style.visibility="hidden";
 }
@@ -206,8 +206,10 @@ function weatherByPlaceForecast(lat, lon, period)
                 });
             }
         });
+    } else {
+        return elStatus.textContent = "Le service n'est pas disponible pour le moment, nous nous excusons de la gène occasionnée";
     }
-    
+
     });
     xhr.open("GET", "https://api.climacell.co/v3/weather/forecast/daily?lat="+lat+"&lon="+lon+"&start_time=now&end_time="+period+"&unit_system=si&fields=temp,weather_code");
     xhr.setRequestHeader("apikey", "s97GKAHOKyajMLnKOzPijDzJK0BBvio0");
@@ -244,15 +246,17 @@ function getMyPosition()
     }
     function error(error) 
     {
-        console.log("Erreur de géoloc N°"+error.code+" : "+error.message);
-        console.log(error);
+        // console.log("Erreur de géoloc N°"+error.code+" : "+error.message);
+        // console.log(error);
+
         // pour cacher le spinner
         spinner.style.display="none";
-        return elStatus.textContent = "Impossible de récupérer votre position, vérifier vos réglages de confidentialité";
+
+        return elStatus.innerText = "Impossible de récupérer votre position, vérifier vos paramètres de confidentialité";
     }
 
     if (!navigator.geolocation) {
-        elStatus.textContent = "La géolocalisation n'est pas prise en charge par votre navigateur";
+        elStatus.innerText = "La géolocalisation n'est pas prise en charge par votre navigateur";
     } else {
         // pour faire apparaître le spinner
         spinner.style.display="block";
@@ -271,12 +275,18 @@ function getOneLocation(town)
     xhr.onload = function () 
     {
         let data = JSON.parse(xhr.responseText);
-        let city = data.features[0].properties.city;
-        let lat = data.features[0].geometry.coordinates[1];
-        let lon = data.features[0].geometry.coordinates[0];
+        let dataLength = Object.keys(data.features).length;
 
-        showCityName(city);
-        weatherByPlaceForecast(lat, lon, period);
+        if (dataLength != 0) {
+            let city = data.features[0].properties.city;
+            let lat = data.features[0].geometry.coordinates[1];
+            let lon = data.features[0].geometry.coordinates[0];
+
+            showCityName(city);
+            weatherByPlaceForecast(lat, lon, period);
+        } else {
+            return elStatus.textContent = "Aucune correspondance, veuillez vérifier les informations saisies";
+        }
     }
 
     xhr.send();
@@ -286,8 +296,7 @@ function getOneLocation(town)
 // fonction pour afficher le nom de la ville demandée
 function showCityName(city) 
 {
-    let containerCityName = document.getElementById('show-status');
-    containerCityName.innerText= "Voici les prévisions météorologiques sur 7 jours pour "+city;
+    elStatus.innerText= "Voici les prévisions météorologiques sur 7 jours pour "+city;
 }
 
 // --------------- pas opérationel car pas assez précis (indique Paris au lieu de Lyon...) ---------------
