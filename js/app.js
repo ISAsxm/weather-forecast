@@ -46,7 +46,7 @@ function eraseDatas()
     let elIcons = document.getElementById('icons');
     let elTemperaturesMin = document.getElementById('temperaturesMin');
     let elTemperaturesMax = document.getElementById('temperaturesMax');
-    let elCityName = document.getElementById('show-city-name');
+    let elCityName = document.getElementById('show-status');
 
     elDates.innerHTML = " ";
     elIcons.innerHTML = " ";
@@ -221,8 +221,7 @@ function weatherByPlaceForecast(lat, lon, period)
 //        !!!!! manque de précision lors des tests, fonction getMyCity() mise en commentaire pour l'instant !!!!!!!
 function getMyPosition() 
 {
-    // pour faire apparaître le spinner
-    spinner.style.display="block";
+    var elStatus = document.getElementById('show-status');
 
     const options = { 
         enableHighAccuracy: true,
@@ -240,15 +239,27 @@ function getMyPosition()
 
         // pas opérationel car pas assez précis (indique Paris au lieu de Lyon...)
         // getMyCity(lat,lon);
+        elStatus.textContent = "Voici les prévisions météorologiques sur 7 jours pour votre position";
         weatherByPlaceForecast(lat, lon, period);
     }
     function error(error) 
     {
         console.log("Erreur de géoloc N°"+error.code+" : "+error.message);
         console.log(error);
+        // pour cacher le spinner
+        spinner.style.display="none";
+        return elStatus.textContent = "Impossible de récupérer votre position, vérifier vos réglages de confidentialité";
     }
 
-    navigator.geolocation.getCurrentPosition(success, error, options);
+    if (!navigator.geolocation) {
+        elStatus.textContent = "La géolocalisation n'est pas prise en charge par votre navigateur";
+    } else {
+        // pour faire apparaître le spinner
+        spinner.style.display="block";
+
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    }
+
 }
 
 
@@ -275,26 +286,26 @@ function getOneLocation(town)
 // fonction pour afficher le nom de la ville demandée
 function showCityName(city) 
 {
-    let containerCityName = document.getElementById('show-city-name');
+    let containerCityName = document.getElementById('show-status');
     containerCityName.innerText= "Voici les prévisions météorologiques sur 7 jours pour "+city;
 }
 
-
+// --------------- pas opérationel car pas assez précis (indique Paris au lieu de Lyon...) ---------------
 // fonction pour trouver le nom de la ville selon la position du user (clic sur géolocalisation)
-function getMyCity(lat,lon) 
-{
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://api-adresse.data.gouv.fr/reverse/?lon="+lon+"&lat="+lat, true);
-    xhr.onload = function () 
-    {
-        let data = JSON.parse(xhr.responseText);
-        let city = data.features[0].properties.city;
+// function getMyCity(lat,lon) 
+// {
+//     let xhr = new XMLHttpRequest();
+//     xhr.open("GET", "https://api-adresse.data.gouv.fr/reverse/?lon="+lon+"&lat="+lat, true);
+//     xhr.onload = function () 
+//     {
+//         let data = JSON.parse(xhr.responseText);
+//         let city = data.features[0].properties.city;
 
-        showCityName(city);
-    }
+//         showCityName(city);
+//     }
 
-    xhr.send();
-}
+//     xhr.send();
+// }
 
 
 // ----------------------------------------------------------------------------------------
