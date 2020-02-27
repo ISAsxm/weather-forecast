@@ -117,98 +117,96 @@ function weatherByPlaceForecast(lat, lon, period)
     xhr.withCredentials = true;
     xhr.addEventListener("readystatechange", function() 
     {
-    if(this.readyState === 4) {
-        // pour cacher le spinner
-        spinner.style.display="none";
-        // pour faire apparaître le container forecast
-        containerForecast.style.visibility="initial";
+        if(this.readyState === 4 && this.status === 200) {
+            // pour cacher le spinner
+            spinner.style.display="none";
+            // pour faire apparaître le container forecast
+            containerForecast.style.visibility="initial";
 
-        let responses = JSON.parse(this.responseText);
-        responses.forEach(function(response) 
-        {
-            // pour afficher les dates
-            let datesElt = document.getElementById("dates");
-            let dateElt = document.createElement("li");
-            let formattedDate = formattingDate(response.observation_time.value);
-            dateElt.textContent = formattedDate;
-            datesElt.appendChild(dateElt);
+            let responses = JSON.parse(this.responseText);
+            responses.forEach(function(response) 
+            {
+                // pour afficher les dates
+                let datesElt = document.getElementById("dates");
+                let dateElt = document.createElement("li");
+                let formattedDate = formattingDate(response.observation_time.value);
+                dateElt.textContent = formattedDate;
+                datesElt.appendChild(dateElt);
 
-            // pour afficher les températures Min
-            let temperaturesMinElt = document.getElementById("temperaturesMin");
-            let tempMinElt = document.createElement("li");
-            tempMinElt.textContent = " Température prévisionnelle min " + Math.round(response.temp[0].min.value) + "°" + response.temp[0].min.units;
-            temperaturesMinElt.appendChild(tempMinElt);
+                // pour afficher les températures Min
+                let temperaturesMinElt = document.getElementById("temperaturesMin");
+                let tempMinElt = document.createElement("li");
+                tempMinElt.textContent = " Température prévisionnelle min " + Math.round(response.temp[0].min.value) + "°" + response.temp[0].min.units;
+                temperaturesMinElt.appendChild(tempMinElt);
 
-            // pour afficher les températures Max
-            let temperaturesMaxElt = document.getElementById("temperaturesMax");
-            let tempMaxElt = document.createElement("li");
-            tempMaxElt.textContent = " Température prévisionnelle max " + Math.round(response.temp[1].max.value) + "°" + response.temp[1].max.units;
-            temperaturesMaxElt.appendChild(tempMaxElt);
+                // pour afficher les températures Max
+                let temperaturesMaxElt = document.getElementById("temperaturesMax");
+                let tempMaxElt = document.createElement("li");
+                tempMaxElt.textContent = " Température prévisionnelle max " + Math.round(response.temp[1].max.value) + "°" + response.temp[1].max.units;
+                temperaturesMaxElt.appendChild(tempMaxElt);
 
-            // pour afficher les icônes
-            let iconsElt = document.getElementById('icons');
-            let iconElt = document.createElement("li");
-            let icon;
-            let weather=response.weather_code.value;
-            switch(weather) {
-                case 'clear':
-                    icon = decodeHTML('&#127774;');
-                    break;
-                case 'mostly_clear':
-                    icon = decodeHTML('&#127780;');
-                    break;
-                case 'partly_cloudy':
-                    icon = decodeHTML('&#9925;');
-                case 'cloudy':
-                    icon = decodeHTML('&#9729;');
-                    break;
-                case 'mostly_cloudy':
-                case 'fog_light':
-                case 'fog':
-                    icon = decodeHTML('&#127787;');
-                    break;
-                case 'rain':
-                case 'rain_light':
-                case 'freezing_rain':
-                case 'freezing_rain_light':
-                case 'drizzle':
-                case 'freezing_drizzle':
-                case 'flurries':
-                    icon = decodeHTML('&#127783;');
-                    break;
-                case 'rain_heavy':
-                case 'freezing_rain_heavy':
-                    icon = decodeHTML('&#128166;');
-                    break;
-                case 'tstorm':
-                    icon = decodeHTML('&#9928;');
-                    break;
-                case 'snow_heavy':
-                case 'snow':
-                case 'snow_light':
-                    icon = decodeHTML('&#127784;');
-                    break;
-                case 'ice_pellets_heavy':
-                case 'ice_pellets':
-                case 'ice_pellets_light':
-                    icon = decodeHTML('&#10052;');
-                    break;
-                default:
-                    icon = decodeHTML('&#127782;');
-                    break;
-            }
-            iconElt.textContent = icon;
-            iconsElt.appendChild(iconElt);
+                // pour afficher les icônes
+                let iconsElt = document.getElementById('icons');
+                let iconElt = document.createElement("li");
+                let icon;
+                let weather=response.weather_code.value;
+                switch(weather) {
+                    case 'clear':
+                        icon = decodeHTML('&#127774;');
+                        break;
+                    case 'mostly_clear':
+                        icon = decodeHTML('&#127780;');
+                        break;
+                    case 'partly_cloudy':
+                        icon = decodeHTML('&#9925;');
+                    case 'cloudy':
+                        icon = decodeHTML('&#9729;');
+                        break;
+                    case 'mostly_cloudy':
+                    case 'fog_light':
+                    case 'fog':
+                        icon = decodeHTML('&#127787;');
+                        break;
+                    case 'rain':
+                    case 'rain_light':
+                    case 'freezing_rain':
+                    case 'freezing_rain_light':
+                    case 'drizzle':
+                    case 'freezing_drizzle':
+                    case 'flurries':
+                        icon = decodeHTML('&#127783;');
+                        break;
+                    case 'rain_heavy':
+                    case 'freezing_rain_heavy':
+                        icon = decodeHTML('&#128166;');
+                        break;
+                    case 'tstorm':
+                        icon = decodeHTML('&#9928;');
+                        break;
+                    case 'snow_heavy':
+                    case 'snow':
+                    case 'snow_light':
+                        icon = decodeHTML('&#127784;');
+                        break;
+                    case 'ice_pellets_heavy':
+                    case 'ice_pellets':
+                    case 'ice_pellets_light':
+                        icon = decodeHTML('&#10052;');
+                        break;
+                    default:
+                        icon = decodeHTML('&#127782;');
+                        break;
+                }
+                iconElt.textContent = icon;
+                iconsElt.appendChild(iconElt);
 
-            if (window.screen.width < 1350) {
-                document.querySelector('#container-forecast').scrollIntoView({ 
-                    behavior: 'smooth'
-                });
-            }
-        });
-    } else {
-        return elStatus.textContent = "Le service n'est pas disponible pour le moment, nous nous excusons de la gène occasionnée";
-    }
+                if (window.screen.width < 1350) {
+                    document.querySelector('#container-forecast').scrollIntoView({ 
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        } 
 
     });
     xhr.open("GET", "https://api.climacell.co/v3/weather/forecast/daily?lat="+lat+"&lon="+lon+"&start_time=now&end_time="+period+"&unit_system=si&fields=temp,weather_code");
@@ -252,11 +250,11 @@ function getMyPosition()
         // pour cacher le spinner
         spinner.style.display="none";
 
-        return elStatus.innerText = "Impossible de récupérer votre position, vérifier vos paramètres de confidentialité";
+        return elStatus.innerText = "Impossible de récupérer votre position, veuillez vérifier vos paramètres de confidentialité ou utiliser la recherche par ville";
     }
 
     if (!navigator.geolocation) {
-        elStatus.innerText = "La géolocalisation n'est pas prise en charge par votre navigateur";
+        elStatus.innerText = "La géolocalisation n'est pas prise en charge par votre navigateur, veuillez utiliser la recherche par ville";
     } else {
         // pour faire apparaître le spinner
         spinner.style.display="block";
