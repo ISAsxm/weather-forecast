@@ -1,0 +1,41 @@
+// MEDIA QUERY MANAGER
+/*
+
+converting px to em to prevent if users change style size
+1em == 16px browser's style size by default
+600px/16px = 37.5em
+800px/16px = 50em
+900px/16px = 56.25em
+1000px/16px = 62.5em
+1200px/16px = 75em
+1300px/16px = 81.25em
+1800px/16px = 112.5em
+
+$breakpoint argument choices:
+- phone         600px
+- phone-l       800px
+- tab           900px
+- tab-port      1000px
+- tab-land      1300px
+- big-desktop   1800px
+*/
+@mixin responsive($breakpoint) {
+    @if $breakpoint == phone {
+        @media only screen and (max-width: 37.5em) { @content }; // 600px
+    }
+    @if $breakpoint == phone-l {
+        @media only screen and (max-width: 50em) { @content }; // 800px
+    }
+    @if $breakpoint == tab {
+        @media only screen and (max-width: 56.25em) { @content }; // 900px
+    }
+    @if $breakpoint == tab-port {
+        @media only screen and (max-width: 62.5em) { @content }; // 1000px
+    }
+    @if $breakpoint == tab-land {
+        @media only screen and (max-width: 81.25em) { @content }; // 1300px
+    }
+    @if $breakpoint == big-desktop {
+        @media only screen and (min-width: 112.5em) { @content }; // 1800px
+    }
+}

@@ -1,0 +1,90 @@
+
+//////////////////////////////////////////
+// SEARCH BOX
+.search {
+    // raccourci flex : grow, shrink et basis
+    flex: 0 0 40%;
+    // pour centrer le button et le input
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2rem;
+
+    @include responsive(tab-port) {
+        order: 1;
+        flex: 0 0 100%;
+        background-color: $color-grey-light-3;
+        margin-right: 0;
+        
+    }
+
+    &__input {
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+        background-color: $color-grey-light-2;
+        border: none;
+        padding: .7rem 2rem;
+        border-radius: 100px;
+        width: 80%;
+        height: 3.5rem;
+        // pour les effets au focus
+        transition: all .2s;
+        // pour déplacer le button (icon search) au top du input
+        margin-right: -3.25rem;
+        caret-color: $color-grey-dark-3;
+
+        @include responsive (tab-port) {
+
+            padding: .9rem 4rem;
+            background-color: $color-grey-light-3;
+            height: 5rem;
+        }
+
+        &:focus {
+
+            outline: none;
+            background-color: $color-grey-light-3;
+            width: 90%;
+        }
+        // pseudo sélecteur qui vise le placeholder (ne fonctionne que sur chrome et safari)
+        &::-webkit-input-placeholder {
+            
+            font-weight: 100;
+            color: $color-grey-light-4;
+        }
+    }
+
+    // pour cibler le button et lui faire changer son background en même temps que l'input
+    &__input:focus + &__btn {
+        background-color: $color-grey-light-3;
+    
+    }
+    &__btn {
+        border: none;
+        background-color: $color-grey-light-2;
+        // pour les effets au active
+        transition: all .2s;
+
+        @include responsive(tab-port) {
+
+            background-color: $color-grey-light-3;
+        }
+
+
+        &:focus {
+            outline: none;
+        }
+        
+        &:active {
+            transform: translateY(2px);
+        }
+    }
+
+    &__icon {
+        height: 2rem;
+        width: 2rem;
+        fill: $color-grey-dark-3;
+    }
+    
+}

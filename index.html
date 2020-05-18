@@ -1,46 +1,136 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Pacifico|Quicksand:400,600,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/media_queries.css">
-    <link rel="icon" type="image/png" href="https://image.flaticon.com/icons/png/512/22/22952.png">
-    <title>Appli météo</title>
-</head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-<body>
-    <header class="container-row">
-        <h1>Vos prévisions météo</h1>
-    </header>
-    <h2 id="show-status">Entrez le nom de votre ville ou utilisez la géolocalisation pour afficher les prévisions météorologiques sur 7 jours</h2>
-    <div class="container-row" id="container-form">
-        <form id="coordinates-form">
-            <label for="latitude">Entrer le nom ou le code postal de votre ville<span class="required">*</span></label>
-            <input type="text" name="town" id="town">
-            <div class="container-do-action">
-                <input type="button" value="Afficher" id="button-submit">
-                <input type="button" id="getMyPosition" value="Afficher selon ma géolocalisation">
-                <input type="reset" id="button-reset">
-            </div>
-        </form>
-    </div>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet"/>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="shortcut icon" type="image/png" href="https://image.flaticon.com/icons/png/512/22/22952.png">
+    <title>Weather Forecast App</title>
+  </head>
+
+  <body>
     <div class="container">
-        <div class="container-row">
-            <div id="container-forecast">
-                <ul id="dates"></ul>
-                <ul id="icons"></ul>
-                <ul id="temperaturesMin"></ul>
-                <ul id="temperaturesMax"></ul>
-            </div>
-        </div>
-        <div id="spinner"></div>
-    </div>
-    <footer>
-        <small>&copy; 2020 Isabelle Hugues.</small>
-    </footer>
-    <script src="js/app.js"></script>
-</body>
+      <header class="header">
+        <svg class="header__logo">
+          <use xlink:href="img/sprite.svg#icon-weather"></use>
+        </svg>
+        <h1 class="heading">
+          Enter your city name or postal code
+        </h1>
+        <form action="#" class="search">
+          <input
+            type="text"
+            class="search__input"
+            placeholder="Search postcode"
+          />
+          <button class="search__btn">
+            <svg class="search__icon">
+              <use xlink:href="img/sprite.svg#icon-magnifying-glass"></use>
+            </svg>
+          </button>
+        </form>
+      </header>
 
+      <div class="weather">
+        <div class="card">
+          <div class="card__col card__col--1">
+            <h3 id="city_label" class="card__heading card__heading--3">CITY NAME</h3>
+            <p id="day_label" class="card__heading card__heading--4">MONDAY</p>
+            <p id="date_label" class="card__text">00/00/2020</p>
+            <p class="card__text--icon">
+              <svg class="card__icon">
+                <use xlink:href="img/sprite.svg#icon-wind"></use>
+              </svg>
+              <span id="wind_label">6</span>km/h
+            </p>
+            <p class="card__text--icon">
+              <svg class="card__icon">
+                <use xlink:href="img/sprite.svg#icon-droplet"></use>
+              </svg>
+              <span id="humidity_label">30</span>%
+            </p>
+          </div>
+          <div class="card__col card__col--2">
+            <svg class="card__icon card__icon--principal u-margin-bottom-small">
+              <use xlink:href="img/sprite.svg#icon-cloudy"></use>
+            </svg>
+            <p id="code_label" class="card__heading--4 u-center-text">
+              PARTLY CLOUDY
+            </p>
+          </div>
+          <div class="card__col card__col--3">
+            <p class="card__text--icon">
+              <svg class="card__icon">
+                <use xlink:href="img/sprite.svg#icon-arrow-long-down"></use>
+              </svg>
+              <span class="card__text--unit" id="min_temp">18</span>
+              <svg class="card__icon">
+                <use xlink:href="img/sprite.svg#icon-arrow-long-up"></use>
+              </svg>
+              <span class="card__text--unit" id="max_temp">25</span>
+            </p>
+            <p id="degrees_label" class="card__heading card__heading--2">
+              22
+            </p>
+          </div>
+        </div>
+
+        <div class="card card--s">
+          <div class="card__small">
+            <p class="card__small__text">TUE</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-sun"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">9</p>
+          </div>
+          <div class="card__small">
+            <p class="card__small__text">TUE</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-sun"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">19</p>
+          </div>
+          <div class="card__small">
+            <p class="card__small__text">TUE</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-sun"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">19</p>
+          </div>
+          <div class="card__small">
+            <p class="card__small__text">TUE</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-sun"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">19</p>
+          </div>
+          <div class="card__small">
+            <p class="card__small__text">TUE</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-sun"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">19</p>
+          </div>
+          <div class="card__small">
+            <p class="card__small__text">TUE</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-sun"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">19</p>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p class="footer__text">&copy; Isabelle Hugues, just to improve my front end techniques.</p>
+      </footer>
+
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
 </html>

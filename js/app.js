@@ -1,353 +1,266 @@
-// adresse de la doc de l'api weather forecast https://www.climacell.co/weather-api/docs/
-// adresse la doc de l'api rechercher par adresse https://geo.api.gouv.fr/adresse
-// descriptif de l'application : appli destinée à afficher les prévisions météo sur une période de jour actuel +6 jours, soit en utilisant la géolocalisation, soit en utilisant un moteur de recherche par ville (uniquement valable pour les villes française et drom)
+/** ***************************************
+ *          DATA CONTROLLER MODULE
+ *************************************** */ 
 
-// ui/ux : spinner lors du load des datas
-var spinner = document.getElementById("spinner");
-spinner.style.display="none";
-// ui/ux : faire apparaître le container forecast seulement lorsqu'il reçoit les données
-var containerForecast = document.getElementById('container-forecast');
-// ui/ux : container pour afficher un feed-back lors des actions et erreurs
-var elStatus = document.getElementById("show-status");
-// ---------------------------------------------------
-// ------------------- fonctions ---------------------
-// ---------------------------------------------------
+var DataController = (function() {
 
-// fonction de décodage des htmlEntities pour pouvoir les afficher dans le navigateur
-function decodeHTML(html) 
-{
-	let text = document.createElement("textarea");
-	text.innerHTML = html;
-	return text.value;
-}
-
-
-// fonction permettant de sécuriser les inputs (équivalent du htmlspecialchars)
-function escapeHtml(text) 
-{
-    let map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    };
-    return text.replace(/[&<>"']/g, function(m) 
-    { 
-        return map[m]; 
-    });
-}
-
-
-// fonction pour effacer les données si déjà chargées, dans le cas ou le user souhaite faire une autre recherche (utiliser également avec le bouton reset)
-function eraseDatas() 
-{
-    let elDates = document.getElementById('dates');
-    let elIcons = document.getElementById('icons');
-    let elTemperaturesMin = document.getElementById('temperaturesMin');
-    let elTemperaturesMax = document.getElementById('temperaturesMax');
-
-    elDates.innerHTML = " ";
-    elIcons.innerHTML = " ";
-    elTemperaturesMin.innerHTML = " ";
-    elTemperaturesMax.innerHTML = " ";
-
-    elStatus.innerText = "Entrez le nom de votre ville ou son code postal, ou utilisez la géolocalistaion pour afficher les prévisions météorologiques sur 7 jours";
-
-    containerForecast.style.visibility="hidden";
-}
-
-
-// fonction permettant de calculer la date actuelle et d'ajouter un nombres de jours choisi en paramètre
-Date.prototype.addDays = function(days) 
-{
-    let date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-
-    return date;
-}
-// pour ajouter 6 jours à la date actuelle et convertir le tout en format iso-8601 (format supporté par l'api)
-var date = new Date();
-var period = date.addDays(6).toISOString();
-
-
-// fonction pour formater la date lors de l'affichage, prend en paramètre la valeur de la réponse à la requête à l'api
-function formattingDate(oneDate) {
-    const daysNames = [
-        'Dim',
-        'Lun',
-        'Mar',
-        'Mer',
-        'Jeu',
-        'Ven',
-        'Sam'
-      ];
-    const monthsNames = [
-        'Janvier',
-        'Février',
-        'Mars',
-        'Avril',
-        'Mai',
-        'Juin',
-        'Juillet',
-        'Août',
-        'Septembre',
-        'Octobre',
-        'Novembre',
-        'Decembre'
-      ];
-
-    let formatDate = new Date(oneDate);
-    let dayName = daysNames[formatDate.getDay()];
-    let dayDate = formatDate.getDate();
-    let monthName = monthsNames[formatDate.getMonth()];
-
-    return formattedDate = `${dayName} ${dayDate} ${monthName}`;
-}
-
-
-// fonction permettant d'afficher les prévisions météo selon un emplacement et une période (prend en paramètre la latitude, la longitude et la période), fait appel a l'api climacell
-function weatherByPlaceForecast(lat, lon, period)
-{
-    // pour afficher le spinner
-    spinner.style.display="block";
-
-    let data = "";
-    let xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-    xhr.addEventListener("readystatechange", function() 
+    let getLocationApi = async function (city_sought) 
     {
-        if(this.readyState === 4 && this.status === 200) {
-            // pour cacher le spinner
-            spinner.style.display="none";
-            // pour faire apparaître le container forecast
-            containerForecast.style.visibility="initial";
+        const URL = `https://api-adresse.data.gouv.fr/search/?q=${city_sought}&type=municipality&limit=1&autocomplete=1`;
+        // const PROXY_URL = "https://cors-anywhere.herokuapp.com/";
+        
+        try
+        {
 
-            let responses = JSON.parse(this.responseText);
-            responses.forEach(function(response) 
+            // let response = await fetch(PROXY_URL + URL);
+            let response = await fetch(URL);
+
+            if(response.ok) {
+                return await response.json();
+            } else {
+                console.error("Erreur", response.status);
+            }
+
+        }catch(err)
+        {
+            console.error("Erreur réseau", err);
+        }
+    };
+
+
+    let getWeatherApi = async function(city)
+    {
+
+        const BASE_URL = 'https://api.weatherbit.io/v2.0/forecast/daily?';
+        const API_KEY = '6466c33d606b43a9ac49907c65f8810b';
+
+        const URL = `${BASE_URL}${city}&key=${API_KEY}`;
+
+        try
+        {
+            let response = await fetch(URL);
+
+            if(response.ok) {
+                return await response.json();
+            } else {
+                console.error("Erreur", response.status);
+            }
+            
+        }catch(err)
+        {
+            console.error("Erreur réseau", err);
+        }
+    };
+
+
+    return {
+
+        getWeatherForecast: function(city) {
+
+            return getWeatherApi(city);
+        },
+
+        getLocation: function(city_sought) {
+
+            return getLocationApi(city_sought);
+        },
+
+    };
+
+})(); 
+
+
+/** ***************************************
+ *          UI CONTROLLER MODULE
+ *************************************** */ 
+var UIController = (function() {
+
+
+    // object pour stocker les références des éléments cible du DOM
+    const DOMStrings = {
+        
+        inputSearch: '.search__input',
+        btnSearch: '.search__btn',
+        cityLabel: '#city_label',
+        dayLabel: '#day_label',
+        dateLabel: '#date_label',
+        windLabel: '#wind_label',
+        humidityLabel: '#humidity_label',
+        tempMinLabel: '#min_temp',
+        tempMaxLabel: '#max_temp',
+        iconPrincipal: '.card__icon--principal',
+        descriptionLabel: '#code_label',
+        degreesLabel: '#degrees_label',
+        smallCardContainer: '.card--s',
+    };
+
+    // function publique pour accéder au code en dehors de mon controller
+    return {
+    // function publique qui permet d'accéder aux éléments DOM cibles enregistrés dans l'object DOMStrings
+        getDOMStrings: function() 
+        {
+            return DOMStrings;
+        },
+
+        displayData: function(data) 
+        {
+            var html, newHtml, element;
+
+            // insérer les données dans les petites cartes
+
+            // récupérer le container
+            element = DOMStrings.smallCardContainer;
+            // effacer les cards placeholders
+            document.querySelector(element).innerHTML = "";
+            // créer mon template
+            html = '<div class="card__small"><p class="card__small__text">%TUE%</p><svg class="card__small__icon icon-sun"><use xlink:href="img/sprite.svg#%icon-sun%"></use></svg><p class="card__small__text card__small__text--unit">%9%</p></div>';
+            
+            
+            for (let i = 0; i < data.smallDayName.length; i++) {
+
+                // remplacer les placeholder par les données
+                newHtml = html.replace('%TUE%', data.smallDayName[i]);
+                newHtml = newHtml.replace('%icon-sun%', data.smallIcon[i]);
+                newHtml = newHtml.replace('%9%',data.smallDegrees[i]);
+                
+                // insérer le html dans le DOM
+                document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+            
+            }
+
+            // insérer les données dans la carte principale
+            document.querySelector(DOMStrings.cityLabel).innerText = data.cityLabel;
+            document.querySelector(DOMStrings.dateLabel).innerText = data.dateLabel;
+            document.querySelector(DOMStrings.descriptionLabel).innerText = data.descriptionLabel;
+            document.querySelector(DOMStrings.humidityLabel).innerText = data.humidityLabel;
+            document.querySelector(DOMStrings.windLabel).innerText = data.windLabel;
+            document.querySelector(DOMStrings.degreesLabel).innerText = data.degreesLabel;
+            document.querySelector(DOMStrings.dayLabel).innerText = data.dayName;
+            document.querySelector(DOMStrings.tempMinLabel).innerText = data.tempMinLabel;
+            document.querySelector(DOMStrings.tempMaxLabel).innerText = data.tempMaxLabel;
+            document.querySelector(DOMStrings.iconPrincipal).innerHTML = `<use xlink:href="img/sprite.svg#${data.icon}"></use>`;
+        },
+
+        formatDayName: function(date) {
+
+            const D = new Date(date);
+            const DAY_INDEX = D.getDay();
+            const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const DAY_NAME = DAYS[DAY_INDEX];
+
+            return DAY_NAME;
+        },
+
+        formatDate: function(date) {
+
+            // input format == YYYY-MM-DD
+            let d = date.split("-");
+            let newFormat = `${d[2]}/${d[1]}/${d[0].substr(2)}`;
+            // output format == DD/MM/YY
+            return newFormat;
+        },
+
+        formatIcon: function(code) {
+
+
+            if (code >= 200 && code <= 299) {
+                icon = 'icon-lightning';
+            } else if (code >= 300 && code <= 399) {
+                icon = 'icon-rainy';
+            } else if (code >= 500 && code <= 599) {
+                icon = 'icon-rainy1';
+            } else if (code >= 600 && code <= 699) {
+                icon = 'icon-snowy';
+            } else if (code >= 700 && code <= 799) {
+                icon = 'icon-weather1';
+            } else if (code >= 801 && code <= 899) {
+                icon = 'icon-cloudy';
+            } else {
+                icon= 'icon-sun';
+            }
+
+            return icon;
+        },
+
+    };
+
+})();
+
+/** ***************************************
+ *          APP CONTROLLER MODULE
+ *************************************** */ 
+
+var appController = (function(dataCtrl, UICtrl) {
+
+    // pour récupérer les éléments du DOM
+    const DOM = UICtrl.getDOMStrings();
+
+    // pour gérér les événements
+    var setupEventListeners = function() {
+
+        
+        const BTN = document.querySelector(DOM.btnSearch);
+        // let city_sought = document.querySelector(DOM.inputSearch).value;
+        let city_sought = "69130";
+
+        BTN.addEventListener('click', function() 
+        {
+
+            dataCtrl.getLocation(city_sought).then(function(response)
             {
-                // pour afficher les dates
-                let datesElt = document.getElementById("dates");
-                let dateElt = document.createElement("li");
-                let formattedDate = formattingDate(response.observation_time.value);
-                dateElt.textContent = formattedDate;
-                datesElt.appendChild(dateElt);
+                let lat, lon, city;
+        
+                lat = response.features[0].geometry.coordinates[1];
+                lon = response.features[0].geometry.coordinates[0];
 
-                // pour afficher les températures Min
-                let temperaturesMinElt = document.getElementById("temperaturesMin");
-                let tempMinElt = document.createElement("li");
-                tempMinElt.textContent = " Température prévisionnelle min " + Math.round(response.temp[0].min.value) + "°" + response.temp[0].min.units;
-                temperaturesMinElt.appendChild(tempMinElt);
+                return city = `&lat=${lat}&lon=${lon}`;
+        
+            }).then(function(city)
+            {
+        
+                dataCtrl.getWeatherForecast(city).then(function(response)
+                {
 
-                // pour afficher les températures Max
-                let temperaturesMaxElt = document.getElementById("temperaturesMax");
-                let tempMaxElt = document.createElement("li");
-                tempMaxElt.textContent = " Température prévisionnelle max " + Math.round(response.temp[1].max.value) + "°" + response.temp[1].max.units;
-                temperaturesMaxElt.appendChild(tempMaxElt);
+                    let data = {
+                                cityLabel: response.city_name,
+                                degreesLabel: Math.floor(response.data[0].temp),
+                                descriptionLabel: response.data[0].weather.description,
+                                humidityLabel: Math.floor(response.data[0].rh),
+                                windLabel: Math.floor(response.data[0].wind_spd * 18 / 5),
+                                dateLabel: UICtrl.formatDate(response.data[0].valid_date),
+                                dayName: UICtrl.formatDayName(response.data[0].valid_date),
+                                tempMinLabel: Math.floor(response.data[0].min_temp),
+                                tempMaxLabel: Math.floor(response.data[0].max_temp),
+                                smallDayName: [],
+                                smallDegrees: [],
+                                smallIcon: [],
+                                icon: UICtrl.formatIcon(response.data[0].weather.code),
+                            };
 
-                // pour afficher les icônes
-                let iconsElt = document.getElementById('icons');
-                let iconElt = document.createElement("li");
-                let icon;
-                let weather=response.weather_code.value;
-                switch(weather) {
-                    case 'clear':
-                        icon = decodeHTML('&#127774;');
-                        break;
-                    case 'mostly_clear':
-                        icon = decodeHTML('&#127780;');
-                        break;
-                    case 'partly_cloudy':
-                        icon = decodeHTML('&#9925;');
-                    case 'cloudy':
-                        icon = decodeHTML('&#9729;');
-                        break;
-                    case 'mostly_cloudy':
-                    case 'fog_light':
-                    case 'fog':
-                        icon = decodeHTML('&#127787;');
-                        break;
-                    case 'rain':
-                    case 'rain_light':
-                    case 'freezing_rain':
-                    case 'freezing_rain_light':
-                    case 'drizzle':
-                    case 'freezing_drizzle':
-                    case 'flurries':
-                        icon = decodeHTML('&#127783;');
-                        break;
-                    case 'rain_heavy':
-                    case 'freezing_rain_heavy':
-                        icon = decodeHTML('&#128166;');
-                        break;
-                    case 'tstorm':
-                        icon = decodeHTML('&#9928;');
-                        break;
-                    case 'snow_heavy':
-                    case 'snow':
-                    case 'snow_light':
-                        icon = decodeHTML('&#127784;');
-                        break;
-                    case 'ice_pellets_heavy':
-                    case 'ice_pellets':
-                    case 'ice_pellets_light':
-                        icon = decodeHTML('&#10052;');
-                        break;
-                    default:
-                        icon = decodeHTML('&#127782;');
-                        break;
-                }
-                iconElt.textContent = icon;
-                iconsElt.appendChild(iconElt);
+                    for (let i = 1; i < 7; i++ ) {
 
-                if (window.screen.width < 1350) {
-                    document.querySelector('#container-forecast').scrollIntoView({ 
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        } 
+                        data.smallDayName.push(UICtrl.formatDayName(response.data[i].valid_date));
+                        data.smallDegrees.push(Math.floor(response.data[i].temp));
+                        data.smallIcon.push(UICtrl.formatIcon(response.data[i].weather.code));
+                    }
 
-    });
-    xhr.open("GET", "https://api.climacell.co/v3/weather/forecast/daily?lat="+lat+"&lon="+lon+"&start_time=now&end_time="+period+"&unit_system=si&fields=temp,weather_code");
-    xhr.setRequestHeader("apikey", "s97GKAHOKyajMLnKOzPijDzJK0BBvio0");
-    xhr.setRequestHeader("content-type", "application/json");
+                    UICtrl.displayData(data);
+                })
+            })
+         });
+     };
+    
 
-    xhr.send(data);
-}
+    // function publique pour activer le code en dehors de mon controller
+    return {
 
+        init: function() {
 
-// fonction pour obtenir la position actuelle grâce à la fonction getCurrentPosition() et du navigateur qui récupère la position du device 
-//        !!!!! manque de précision lors des tests, fonction getMyCity() mise en commentaire pour l'instant !!!!!!!
-function getMyPosition() 
-{
-    var elStatus = document.getElementById('show-status');
-
-    const options = { 
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0 
-    };
-
-    function success(position) 
-    {
-        // pour cacher le spinner
-        spinner.style.display="none";
-
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-
-        // pas opérationel car pas assez précis (indique Paris au lieu de Lyon...)
-        // getMyCity(lat,lon);
-        elStatus.textContent = "Voici les prévisions météorologiques sur 7 jours pour votre position";
-        weatherByPlaceForecast(lat, lon, period);
-    }
-    function error(error) 
-    {
-        // console.log("Erreur de géoloc N°"+error.code+" : "+error.message);
-        // console.log(error);
-
-        // pour cacher le spinner
-        spinner.style.display="none";
-
-        return elStatus.innerText = "Impossible de récupérer votre position, veuillez vérifier vos paramètres de confidentialité ou utiliser la recherche par ville";
-    }
-
-    if (!navigator.geolocation) {
-        elStatus.innerText = "La géolocalisation n'est pas prise en charge par votre navigateur, veuillez utiliser la recherche par ville";
-    } else {
-        // pour faire apparaître le spinner
-        spinner.style.display="block";
-
-        navigator.geolocation.getCurrentPosition(success, error, options);
-    }
-
-}
-
-
-// fonction pour la transcription en geodata, appel a l'api data.gouv, permettant de trouver les géoCoordonnées à partir du nom d'une ville ou de son code postal (code postal doit être unique, ne fonctionne pas si partagé)
-function getOneLocation(town)
-{
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://api-adresse.data.gouv.fr/search/?q="+town+"&type=municipality&limit=1&autocomplete=1", true);
-    xhr.onload = function () 
-    {
-        let data = JSON.parse(xhr.responseText);
-        let dataLength = Object.keys(data.features).length;
-
-        if (dataLength != 0) {
-            let city = data.features[0].properties.city + " (" + data.features[0].properties.postcode+ " )";
-            let lat = data.features[0].geometry.coordinates[1];
-            let lon = data.features[0].geometry.coordinates[0];
-            console.log(data);
-            showCityName(city);
-            weatherByPlaceForecast(lat, lon, period);
-        } else {
-            return elStatus.textContent = "Aucune correspondance, veuillez vérifier les informations saisies";
+            setupEventListeners();
         }
     }
 
-    xhr.send();
-}
+})(DataController, UIController);
 
-
-// fonction pour afficher le nom de la ville demandée
-function showCityName(city) 
-{
-    elStatus.innerText= "Voici les prévisions météorologiques sur 7 jours pour "+city;
-}
-
-// --------------- pas opérationel car pas assez précis (indique Paris au lieu de Lyon...) ---------------
-// fonction pour trouver le nom de la ville selon la position du user (clic sur géolocalisation)
-// function getMyCity(lat,lon) 
-// {
-//     let xhr = new XMLHttpRequest();
-//     xhr.open("GET", "https://api-adresse.data.gouv.fr/reverse/?lon="+lon+"&lat="+lat, true);
-//     xhr.onload = function () 
-//     {
-//         let data = JSON.parse(xhr.responseText);
-//         let city = data.features[0].properties.city;
-
-//         showCityName(city);
-//     }
-
-//     xhr.send();
-// }
-
-
-// ----------------------------------------------------------------------------------------
-// ------------------- appel des fonctions, interactions avec le user ---------------------
-// ----------------------------------------------------------------------------------------
-
-// pour appeler la fonction qui va effacer les données affichées au click sur le bouton "reinitialiser"
-var buttonReset = document.getElementById("button-reset");
-buttonReset.addEventListener('click', function(e)
-{
-    eraseDatas();
-});
-
-// pour appeler la fonction getOneLocation (qui elle-même appelle weatherByPlaceForecast()) et récupérer ainsi les valeurs de lat et lon par user action quand valeur entrée dans input "entrer le nom de la ville" et click sur bouton "afficher" et ainsi retourner les données récupérer grâce aux appels auprès des 2 api
-var buttonSubmit = document.getElementById("button-submit");
-buttonSubmit.addEventListener('click', function(e)
-{
-    e.preventDefault();
-    let choiceTown = document.getElementById("town").value;
-    searchTown = escapeHtml(choiceTown);
-    if (searchTown) {
-
-        eraseDatas();
-        getOneLocation(searchTown);
-
-    } else {
-        alert("Veuillez saisir le nom d'une ville française");
-    }
-});
-
-// pour appeler la fonction getMyPosition() (qui se sert du navigateur pour géolocaliser le device) au click sur le bouton "afficher selon ma position"
-var buttonGetMyPosition = document.getElementById('getMyPosition');
-buttonGetMyPosition.addEventListener('click', function(e)
-{
-    e.preventDefault();
-    eraseDatas();
-    getMyPosition();
-});
+// appel à la function init pour rendre le code opérationel
+appController.init();

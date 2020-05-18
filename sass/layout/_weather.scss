@@ -1,0 +1,25 @@
+.weather {
+
+    grid-column: center-start / center-end;
+
+    background-image: linear-gradient(to right bottom, $color-primary-dark-2, $color-primary-dark-1, $color-primary, $color-primary-light-1, $color-primary-light-2);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 7rem;
+    border-radius: 3px;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min-content, 1fr));
+    grid-gap: 7rem;
+
+    @include responsive(tab) {
+
+        grid-column: full-start / full-end;
+        
+    }
+
+    @include responsive(phone) {
+        padding: 4rem;
+    }
+
+}

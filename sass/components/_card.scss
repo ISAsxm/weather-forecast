@@ -1,0 +1,208 @@
+.card {
+
+    background-image: linear-gradient(to right bottom, rgba($color-primary-light-1, 0.8), transparent, rgba($color-white, 0.6) );
+    background-size: cover;
+    background-repeat: no-repeat;
+    box-shadow: $shadow-dark;
+    border-radius: 3px;
+    
+    display: flex;
+    justify-content: space-between;
+
+    @include responsive(tab) {
+
+        flex-wrap: wrap;
+    }
+
+    & > * {
+        color: rgba($color-white, 0.8);
+        font-size: 1.2rem;
+        flex: 0 1 100%;
+    }
+
+    &__col {
+        display: flex;
+        padding: 2rem;
+        flex-direction: column;
+
+        @include responsive(tab) {
+
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @include responsive(phone-l) {
+
+            flex-direction: column;
+            
+        }
+    
+        &--1 {
+            
+            & > * {
+                margin-bottom: 2rem;
+                flex: 0 1 100%;
+
+                @include responsive(tab) {
+                    padding: 0 2rem;
+                    white-space: nowrap;
+                }
+            }
+
+            @include responsive(tab) {
+
+                align-items: baseline;
+            }
+
+            @include responsive(phone-l) {
+
+                align-items: center;
+                
+            }
+        }
+
+        &--2 {
+
+            align-content: center;
+            justify-content: space-evenly;
+            flex: 0 1 100%;
+
+        }
+
+        &--3 {
+
+            flex: 0 1 100%;
+            justify-content: space-evenly;
+
+            & p:first-child {
+
+                align-self: flex-end;
+                margin-bottom: 2rem;
+
+                @include responsive(tab) {
+
+                    align-self: center;
+                    
+                }
+            }
+        }
+
+    }
+    
+    &__heading {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+
+        &--2 {
+            font-size: 12rem;
+            display: flex;
+            align-items: center;
+
+            &::after {
+                
+                content: "";
+                display: inline-block;
+                height: 8rem;
+                width: 8rem;
+                align-self: flex-start;
+                margin-left: -2rem;
+                background-image: url(../../img/Celsius.svg);
+                background-size: cover;
+
+                @supports (-webkit-mask-image: url()) or (mask-image: url()) {
+
+                    background-color: currentColor;
+                    -webkit-mask-image: url(../../img/Celsius.svg);
+                    -webkit-mask-size: cover;
+                    mask-image: url(../../img/Celsius.svg);
+                    mask-size: cover;
+                    background-image: none;
+                }
+               
+            }
+        }
+
+        &--3 {font-size: 3.5rem;}
+
+        &--4 {
+
+            font-size: 3rem;
+
+            @include responsive(tab) {
+
+                margin: 3rem 0 3rem 0;
+            }
+        }
+    }
+
+    &__text,
+    &__small__text {
+
+        font-size: 1.9rem;
+
+        &--icon {
+
+            display: flex;
+            align-items: center;
+            font-size: 1.9rem;
+            line-height: 2rem;
+        }
+
+        &--unit::after {
+            content: "°";
+        }
+    }
+
+    &__icon {
+
+        width: 1.7rem;
+        height: 1.7rem;
+        fill: rgba($color-white, 0.8);
+        margin-top: -3px;
+
+        &--principal {
+            width: 25rem;
+            height: 25rem;
+
+            @include responsive(phone) {
+                width: 20rem;
+                height: 20rem;
+            }
+        }
+    }
+
+    &--s {
+        background-image: linear-gradient(to left bottom, rgba($color-white, 0.6), rgba($color-primary-light-1, 0.4), rgba($color-white, 0.3) );
+    }
+    &__small {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 2rem 0 2rem 0;
+        
+        @include responsive(tab) {
+
+            flex-direction: row;
+
+            & > * {
+                width: 33.3333333%;
+                flex-shrink: 0;
+                text-align: center;
+            }  
+        }
+
+        &__text {
+            padding: 2rem;
+            font-weight: 700;
+        }
+
+        &__icon {
+
+            width: 3.5rem;
+            height: 3.5rem;
+            fill: currentColor;
+        }
+    }
+}

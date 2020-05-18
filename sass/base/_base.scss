@@ -1,0 +1,42 @@
+/* to reset all browser default behavior */
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+/* define font-size to 10px makes easier to adapt the size of the children of html documents */
+html {
+
+    // to set the default-size to 1rem
+    font-size: 62.5%; // 1rem == 10px; 10px/16px = 62.5%
+
+    @include responsive(tab-land) {
+        font-size: 56.25%; // 1rem == 9px, 9/16 = 56.25%
+    }
+
+    @include responsive(tab-port) {
+        font-size: 50%; // 1rem == 8px, 8/16 = 50%
+    }
+
+    @include responsive(big-desktop) {
+        font-size: 75%; // 1rem == 12px, 12/16 = 75%
+    }
+}
+
+body {
+    box-sizing: border-box;
+    padding: 3rem;
+    background-image: linear-gradient(to right bottom, $color-primary-dark-2, $color-primary-dark-1, $color-primary, $color-primary-light-1, $color-primary-light-2);
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    @include responsive(tab-port) {
+        padding: 0;
+        background-color: $color-grey-light-1;
+    }
+}
+
+
