@@ -202,9 +202,9 @@ var appController = (function(dataCtrl, UICtrl) {
         const BTN = document.querySelector(DOM.btnSearch);
         let city_sought;
 
-        city_sought = document.querySelector(DOM.inputSearch).value;
+        // city_sought = document.querySelector(DOM.inputSearch).value;
 
-        // city_sought = "69130";
+        city_sought = "69100";
 
         BTN.addEventListener('click', function() 
         {
