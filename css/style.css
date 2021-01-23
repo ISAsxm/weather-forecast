@@ -1,8 +1,5 @@
 @charset "UTF-8";
 /*
-All _.scss files must be called in this file because it is it which will be compiled in css.
-*/
-/*
 
 converting px to em to prevent if users change style size
 1em == 16px browser's style size by default
@@ -29,17 +26,6 @@ $breakpoint argument choices:
 #5CC2C6
 #2D738C
 ********************************** */
-/*
-All animations (@keyframes) should be in this file.
-*/
-@keyframes shining {
-  0% {
-    fill: #faf9f9; }
-  50% {
-    fill: #999; }
-  100% {
-    fill: #faf9f9; } }
-
 /* to reset all browser default behavior */
 *,
 *::after,
@@ -306,7 +292,7 @@ body {
     height: 4rem;
     width: 4rem;
     margin: 0 0 0 2rem;
-    margin-top: -1rem;
+    margin-top: -.5rem;
     fill: #777; }
   .header h1 {
     margin: 0 2rem;

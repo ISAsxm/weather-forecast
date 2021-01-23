@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900"
+      rel="stylesheet"
+    />
 
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="shortcut icon" type="image/png" href="https://image.flaticon.com/icons/png/512/22/22952.png">
-    <title>Weather Forecast App</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#3c9ba8" />
+
+    <title>Appli Météo</title>
   </head>
 
   <body>
@@ -18,10 +23,8 @@
         <svg class="header__logo">
           <use xlink:href="img/sprite.svg#icon-weather"></use>
         </svg>
-        <h1 class="heading">
-          Enter your city name or postal code
-        </h1>
-        <form action="#" class="search">
+        <h1 class="heading">Entrez un nom de ville ou un code postal</h1>
+        <form action="#" class="search" method="POST" name="search">
           <input
             type="text"
             class="search__input"
@@ -38,8 +41,10 @@
       <div class="weather">
         <div class="card">
           <div class="card__col card__col--1">
-            <h3 id="city_label" class="card__heading card__heading--3">CITY NAME</h3>
-            <p id="day_label" class="card__heading card__heading--4">MONDAY</p>
+            <h3 id="city_label" class="card__heading card__heading--3">
+              MARIGOT
+            </h3>
+            <p id="day_label" class="card__heading card__heading--4">Lundi</p>
             <p id="date_label" class="card__text">00/00/2020</p>
             <p class="card__text--icon">
               <svg class="card__icon">
@@ -59,7 +64,7 @@
               <use xlink:href="img/sprite.svg#icon-cloudy"></use>
             </svg>
             <p id="code_label" class="card__heading--4 u-center-text">
-              PARTLY CLOUDY
+              Nuages épars
             </p>
           </div>
           <div class="card__col card__col--3">
@@ -73,50 +78,48 @@
               </svg>
               <span class="card__text--unit" id="max_temp">25</span>
             </p>
-            <p id="degrees_label" class="card__heading card__heading--2">
-              22
-            </p>
+            <p id="degrees_label" class="card__heading card__heading--2">22</p>
           </div>
         </div>
 
         <div class="card card--s">
           <div class="card__small">
-            <p class="card__small__text">TUE</p>
+            <p class="card__small__text">Mardi</p>
             <svg class="card__small__icon icon-sun">
               <use xlink:href="img/sprite.svg#icon-sun"></use>
             </svg>
             <p class="card__small__text card__small__text--unit">9</p>
           </div>
           <div class="card__small">
-            <p class="card__small__text">TUE</p>
+            <p class="card__small__text">Mercredi</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-lightning"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">19</p>
+          </div>
+          <div class="card__small">
+            <p class="card__small__text">Jeudi</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-rainy1"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">19</p>
+          </div>
+          <div class="card__small">
+            <p class="card__small__text">Vendredi</p>
+            <svg class="card__small__icon icon-sun">
+              <use xlink:href="img/sprite.svg#icon-cloudy"></use>
+            </svg>
+            <p class="card__small__text card__small__text--unit">19</p>
+          </div>
+          <div class="card__small">
+            <p class="card__small__text">Samedi</p>
             <svg class="card__small__icon icon-sun">
               <use xlink:href="img/sprite.svg#icon-sun"></use>
             </svg>
             <p class="card__small__text card__small__text--unit">19</p>
           </div>
           <div class="card__small">
-            <p class="card__small__text">TUE</p>
-            <svg class="card__small__icon icon-sun">
-              <use xlink:href="img/sprite.svg#icon-sun"></use>
-            </svg>
-            <p class="card__small__text card__small__text--unit">19</p>
-          </div>
-          <div class="card__small">
-            <p class="card__small__text">TUE</p>
-            <svg class="card__small__icon icon-sun">
-              <use xlink:href="img/sprite.svg#icon-sun"></use>
-            </svg>
-            <p class="card__small__text card__small__text--unit">19</p>
-          </div>
-          <div class="card__small">
-            <p class="card__small__text">TUE</p>
-            <svg class="card__small__icon icon-sun">
-              <use xlink:href="img/sprite.svg#icon-sun"></use>
-            </svg>
-            <p class="card__small__text card__small__text--unit">19</p>
-          </div>
-          <div class="card__small">
-            <p class="card__small__text">TUE</p>
+            <p class="card__small__text">Dimanche</p>
             <svg class="card__small__icon icon-sun">
               <use xlink:href="img/sprite.svg#icon-sun"></use>
             </svg>
@@ -126,11 +129,12 @@
       </div>
 
       <footer class="footer">
-        <p class="footer__text">&copy; Isabelle Hugues, just to improve my front end techniques.</p>
+        <p class="footer__text">
+          &copy; Isabelle Hugues, just to improve my front end techniques.
+        </p>
       </footer>
-
     </div>
-
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

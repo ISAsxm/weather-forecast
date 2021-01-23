@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
- 
+
     @include responsive(tab-land) {
         flex-wrap: wrap;
         align-content: space-around;
@@ -22,7 +22,7 @@
         height: 4rem;
         width: 4rem;
         margin: 0 0 0 2rem;
-        margin-top: -1rem;
+        margin-top: -.5rem;
         fill: $color-grey-dark-2;
     }
 
@@ -38,4 +38,3 @@
     }
 
 }
-
