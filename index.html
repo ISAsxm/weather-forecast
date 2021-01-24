@@ -42,29 +42,37 @@
         <div class="card">
           <div class="card__col card__col--1">
             <h3 id="city_label" class="card__heading card__heading--3">
-              MARIGOT
+              Marigot
             </h3>
-            <p id="day_label" class="card__heading card__heading--4">Lundi</p>
-            <p id="date_label" class="card__text">00/00/2020</p>
-            <p class="card__text--icon">
-              <svg class="card__icon">
-                <use xlink:href="img/sprite.svg#icon-wind"></use>
-              </svg>
-              <span id="wind_label">6</span>km/h
-            </p>
-            <p class="card__text--icon">
-              <svg class="card__icon">
-                <use xlink:href="img/sprite.svg#icon-droplet"></use>
-              </svg>
-              <span id="humidity_label">30</span>%
-            </p>
+            <div class="card__box card__box--container">
+              <div class="card__box card__box--data">
+                <p id="day_label" class="card__heading card__heading--4">
+                  Lundi
+                </p>
+                <p id="date_label" class="card__text">01/01/2020</p>
+              </div>
+              <div class="card__box card__box--data">
+                <p class="card__text--icon">
+                  <svg class="card__icon">
+                    <use xlink:href="img/sprite.svg#icon-wind"></use>
+                  </svg>
+                  <span id="wind_label">6</span>km/h
+                </p>
+                <p class="card__text--icon">
+                  <svg class="card__icon">
+                    <use xlink:href="img/sprite.svg#icon-droplet"></use>
+                  </svg>
+                  <span id="humidity_label">30</span>%
+                </p>
+              </div>
+            </div>
           </div>
           <div class="card__col card__col--2">
             <svg class="card__icon card__icon--principal u-margin-bottom-small">
               <use xlink:href="img/sprite.svg#icon-cloudy"></use>
             </svg>
             <p id="code_label" class="card__heading--4 u-center-text">
-              Nuages épars
+              Quelques nuages
             </p>
           </div>
           <div class="card__col card__col--3">
@@ -72,16 +80,15 @@
               <svg class="card__icon">
                 <use xlink:href="img/sprite.svg#icon-arrow-long-down"></use>
               </svg>
-              <span class="card__text--unit" id="min_temp">18</span>
+              <span class="card__text--unit" id="min_temp">24</span>
               <svg class="card__icon">
                 <use xlink:href="img/sprite.svg#icon-arrow-long-up"></use>
               </svg>
               <span class="card__text--unit" id="max_temp">25</span>
             </p>
-            <p id="degrees_label" class="card__heading card__heading--2">22</p>
+            <p id="degrees_label" class="card__heading card__heading--2">25</p>
           </div>
         </div>
-
         <div class="card card--s">
           <div class="card__small">
             <p class="card__small__text">Mardi</p>

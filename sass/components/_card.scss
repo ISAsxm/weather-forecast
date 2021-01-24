@@ -90,8 +90,32 @@
 
     }
 
+    &__box {
+        display: flex;
+        flex-wrap: wrap;
+        place-items: baseline;
+        width: 100%;
+
+        &--container {
+            justify-content: space-evenly;
+        }
+
+        &--data {
+            margin-bottom: .5rem;
+
+            &>* {
+                padding-right: 1.5rem;
+            }
+
+            @include responsive(phone-l) {
+
+                justify-content: center;
+            }
+        }
+    }
+
     &__heading {
-        text-transform: uppercase;
+        // text-transform: uppercase;
         letter-spacing: 2px;
 
         &--2 {
@@ -100,40 +124,53 @@
             align-items: center;
 
             &::after {
-
-                content: "";
+                content: "\002103";
                 display: inline-block;
-                height: 8rem;
-                width: 8rem;
                 align-self: flex-start;
-                margin-left: -2rem;
-                background-image: url(../img/Celsius.svg);
-                background-size: cover;
+                margin-top: 3rem;
+                font-size: 4rem;
 
-                @supports (-webkit-mask-image: url()) or (mask-image: url()) {
+                // content: "";
+                // display: inline-block;
+                // height: 8rem;
+                // width: 8rem;
+                // align-self: flex-start;
+                // margin-left: -2rem;
+                // background-image: url(../../img/Celsius.svg);
+                // background-size: cover;
+                // @supports (-webkit-mask-image: url()) or (mask-image: url()) {
 
-                    background-color: currentColor;
-                    -webkit-mask-image: url(../img/Celsius.svg);
-                    -webkit-mask-size: cover;
-                    mask-image: url(../img/Celsius.svg);
-                    mask-size: cover;
-                    background-image: none;
+                //     background-color: currentColor;
+                //     -webkit-mask-image: url(../../img/Celsius.svg);
+                //     -webkit-mask-size: cover;
+                //     mask-image: url(../../img/Celsius.svg);
+                //     mask-size: cover;
+                //     background-image: none;
+                // }
+                @include responsive(phone) {
+                    font-size: 6rem;
+
+                    &::after {
+                        font-size: 2rem;
+                    }
                 }
-
             }
         }
 
         &--3 {
             font-size: 3.5rem;
+
+            @include responsive(phone) {
+                font-size: 2rem;
+            }
         }
 
         &--4 {
 
             font-size: 3rem;
 
-            @include responsive(tab) {
-
-                margin: 3rem 0 3rem 0;
+            @include responsive(phone) {
+                font-size: 2rem;
             }
         }
     }
@@ -152,7 +189,7 @@
         }
 
         &--unit::after {
-            content: "°";
+            content: "\002103";
         }
     }
 
