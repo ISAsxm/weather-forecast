@@ -13,15 +13,25 @@ const DOMStrings = {
   descriptionLabel: "#code_label",
   degreesLabel: "#degrees_label",
   smallCardContainer: ".card--s",
+  loader: ".loader",
+}
+
+const showSpinner = () => {
+  document.querySelector(DOMStrings.loader).style.opacity = 1
+  document.querySelector(DOMStrings.loader).style.visibility = "visible"
+}
+
+const hideSpinner = () => {
+  document.querySelector(DOMStrings.loader).style.opacity = 0
+  document.querySelector(DOMStrings.loader).style.visibility = "hidden"
 }
 
 const displayDataInCards = (data) => {
   // small cards
   let html, newHtml
-
   const smallCardBox = document.querySelector(DOMStrings.smallCardContainer)
-  smallCardBox.innerHTML = ""
 
+  smallCardBox.innerHTML = ""
   html =
     '<div class="card__small"><p class="card__small__text">%TUE%</p><svg class="card__small__icon icon-sun"><use xlink:href="img/sprite.svg#%icon-sun%"></use></svg><p class="card__small__text card__small__text--unit">%9%</p></div>'
 
@@ -48,18 +58,12 @@ const displayDataInCards = (data) => {
   ).innerHTML = `<use xlink:href="img/sprite.svg#${data.icon}"></use>`
 }
 
+/** ***************************************
+ *         CALL API CONTROLLER MODULE
+ *************************************** */
 const formatDayName = (date) => {
   const D = new Date(date)
   const DAY_INDEX = D.getDay()
-  //   const DAYS = [
-  //     "Sunday",
-  //     "Monday",
-  //     "Tuesday",
-  //     "Wednesday",
-  //     "Thursday",
-  //     "Friday",
-  //     "Saturday",
-  //   ]
   const DAYS = [
     "Dimanche",
     "Lundi",
@@ -70,7 +74,6 @@ const formatDayName = (date) => {
     "Samedi",
   ]
   const DAY_NAME = DAYS[DAY_INDEX]
-
   return DAY_NAME
 }
 
@@ -101,9 +104,6 @@ const formatIcon = (code) => {
   return icon
 }
 
-/** ***************************************
- *         CALL API CONTROLLER MODULE
- *************************************** */
 const formatGeoAPiResponse = (response) => {
   lat = response.data.results[0].geometry.lat
   lon = response.data.results[0].geometry.lng
@@ -159,6 +159,7 @@ const getWeatherApi = (city) => {
     .then((response) => {
       const datas = formatWeatherApiResponse(response)
       displayDataInCards(datas)
+      hideSpinner()
     })
     .catch((error) => console.log(error))
 }
@@ -172,6 +173,8 @@ document.forms["search"].addEventListener("submit", function (e) {
     document.forms["search"][0].value != null ||
     document.forms["search"][0].value != ""
   ) {
+    showSpinner()
     getCoordinatesApi(document.forms["search"][0].value)
+    document.forms["search"][0].value = ""
   }
 })

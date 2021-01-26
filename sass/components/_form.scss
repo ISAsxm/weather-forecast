@@ -1,10 +1,7 @@
-
 //////////////////////////////////////////
 // SEARCH BOX
 .search {
-    // raccourci flex : grow, shrink et basis
     flex: 0 0 40%;
-    // pour centrer le button et le input
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,7 +12,7 @@
         flex: 0 0 100%;
         background-color: $color-grey-light-3;
         margin-right: 0;
-        
+
     }
 
     &__input {
@@ -28,9 +25,7 @@
         border-radius: 100px;
         width: 80%;
         height: 3.5rem;
-        // pour les effets au focus
         transition: all .2s;
-        // pour déplacer le button (icon search) au top du input
         margin-right: -3.25rem;
         caret-color: $color-grey-dark-3;
 
@@ -47,23 +42,24 @@
             background-color: $color-grey-light-3;
             width: 90%;
         }
-        // pseudo sélecteur qui vise le placeholder (ne fonctionne que sur chrome et safari)
+
+        // to change the color of the placeholder text
         &::-webkit-input-placeholder {
-            
+
             font-weight: 100;
-            color: $color-grey-light-4;
+            color: $color-grey-dark-1;
         }
     }
 
-    // pour cibler le button et lui faire changer son background en même temps que l'input
-    &__input:focus + &__btn {
+    // to change background color in same time that input focus
+    &__input:focus+&__btn {
         background-color: $color-grey-light-3;
-    
+
     }
+
     &__btn {
         border: none;
         background-color: $color-grey-light-2;
-        // pour les effets au active
         transition: all .2s;
 
         @include responsive(tab-port) {
@@ -75,7 +71,7 @@
         &:focus {
             outline: none;
         }
-        
+
         &:active {
             transform: translateY(2px);
         }
@@ -86,5 +82,5 @@
         width: 2rem;
         fill: $color-grey-dark-3;
     }
-    
+
 }

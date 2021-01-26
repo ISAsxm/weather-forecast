@@ -1,0 +1,40 @@
+.loader {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba($color-black, .6);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    // opacity: 1;
+    transition: all .3s;
+
+    @supports(-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        background-color: rgba($color-black, .3);
+    }
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__spinner {
+        animation: rotate 2s linear infinite;
+        z-index: 2;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        margin: 0 -6rem;
+        width: 10rem;
+        height: 10rem;
+
+        &__path {
+            stroke: hsl(210, 70, 75);
+            stroke-linecap: round;
+            animation: dash 1.5s ease-in-out infinite;
+        }
+    }
+}

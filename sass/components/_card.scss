@@ -115,7 +115,6 @@
     }
 
     &__heading {
-        // text-transform: uppercase;
         letter-spacing: 2px;
 
         &--2 {
@@ -130,23 +129,6 @@
                 margin-top: 3rem;
                 font-size: 4rem;
 
-                // content: "";
-                // display: inline-block;
-                // height: 8rem;
-                // width: 8rem;
-                // align-self: flex-start;
-                // margin-left: -2rem;
-                // background-image: url(../../img/Celsius.svg);
-                // background-size: cover;
-                // @supports (-webkit-mask-image: url()) or (mask-image: url()) {
-
-                //     background-color: currentColor;
-                //     -webkit-mask-image: url(../../img/Celsius.svg);
-                //     -webkit-mask-size: cover;
-                //     mask-image: url(../../img/Celsius.svg);
-                //     mask-size: cover;
-                //     background-image: none;
-                // }
                 @include responsive(phone) {
                     font-size: 6rem;
 

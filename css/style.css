@@ -75,6 +75,21 @@ body {
 .u-margin-bottom-small {
   margin-bottom: 1.5rem !important; }
 
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg); } }
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0; }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35; }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124; } }
+
 .search {
   flex: 0 0 40%;
   display: flex;
@@ -111,7 +126,7 @@ body {
       width: 90%; }
     .search__input::-webkit-input-placeholder {
       font-weight: 100;
-      color: #ccc; }
+      color: #333; }
   .search__input:focus + .search__btn {
     background-color: #f0eeee; }
   .search__btn {
@@ -267,6 +282,39 @@ body {
       width: 3.5rem;
       height: 3.5rem;
       fill: currentColor; }
+
+.loader {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  @supports (-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
+    .loader {
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      background-color: rgba(0, 0, 0, 0.3); } }
+  .loader__spinner {
+    animation: rotate 2s linear infinite;
+    z-index: 2;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin: 0 -6rem;
+    width: 10rem;
+    height: 10rem; }
+    .loader__spinner__path {
+      stroke: #93bfec;
+      stroke-linecap: round;
+      animation: dash 1.5s ease-in-out infinite; }
 
 .footer {
   grid-column: full-start / full-end;
