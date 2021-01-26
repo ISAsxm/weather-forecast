@@ -5,11 +5,7 @@
 Just a little weather forecast project to improve my front-end techniques with Sass, JavaScript and API consuming.  
 Version : 1.0.0  
 Date : 2020-05-06  
-Responsable : HI  
-APIs:
-
-- weather data : https://www.weatherbit.io/api/weather-forecast-16-day
-- geo data : https://opencagedata.com/
+Responsable : HI
 
 ## Implementation :
 
@@ -57,6 +53,8 @@ _(just rename the file to be concat with your file name)_
 - Sass,
 - JavaScript,
 - Axios,
-- APIs
+- APIs:
+  - weather data : https://www.weatherbit.io/api/weather-forecast-16-day
+  - geo data : https://opencagedata.com/
 
 ---
